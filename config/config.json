@@ -1,0 +1,13 @@
+{
+  "entries": [
+    {
+      "entry": "./lib/webparts/addSomeCode/AddSomeCodeWebPart.js",
+      "manifest": "./src/webparts/addSomeCode/AddSomeCodeWebPart.manifest.json",
+      "outputPath": "./dist/add-some-code.bundle.js"
+    }
+  ],
+  "externals": {},
+  "localizedResources": {
+    "addSomeCodeStrings": "webparts/addSomeCode/loc/{locale}.js"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "$schema": "../../../node_modules/@microsoft/sp-module-interfaces/lib/manifestSchemas/jsonSchemas/clientSideComponentManifestSchema.json",
+
+  "id": "30c0aaab-215b-4eee-abe0-8bd2d7dd49a3",
+  "alias": "AddSomeCodeWebPart",
+  "componentType": "WebPart",
+  "version": "0.0.1",
+  "manifestVersion": 2,
+
+  "preconfiguredEntries": [{
+    "groupId": "30c0aaab-215b-4eee-abe0-8bd2d7dd49a3",
+    "group": { "default": "Under Development" },
+    "title": { "default": "AddSomeCode" },
+    "description": { "default": "AddSomeCode will let you add real simple code examples to your SharePoint page." },
+    "officeFabricIconFontName": "Page",
+    "properties": {
+      "description": "AddSomeCode"
+    }
+  }]
+}

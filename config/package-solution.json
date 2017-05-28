@@ -1,0 +1,10 @@
+{
+  "solution": {
+    "name": "spfx-code-show-client-side-solution",
+    "id": "5c0fdbf9-4bd6-44dd-bacd-f4d92b6fe90d",
+    "version": "1.0.0.0"
+  },
+  "paths": {
+    "zippedPackage": "solution/spfx-code-show.sppkg"
+  }
+}
