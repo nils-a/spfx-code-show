@@ -20,7 +20,7 @@ export default class AddSomeCodeWebPart extends BaseClientSideWebPart<IAddSomeCo
             <div class="ms-Grid-col ms-u-lg10 ms-u-xl8 ms-u-xlPush2 ms-u-lgPush1">
               <span class="ms-font-xl ms-fontColor-white">Welcome to SharePoint!</span>
               <p class="ms-font-l ms-fontColor-white">Customize SharePoint experiences using Web Parts.</p>
-              <p class="ms-font-l ms-fontColor-white">${escape(this.properties.description)}</p>
+              <p class="ms-font-l ms-fontColor-white">${escape(this.properties.code)}</p>
               <a href="https://aka.ms/spfx" class="${styles.button}">
                 <span class="${styles.label}">Learn more</span>
               </a>
@@ -39,14 +39,17 @@ export default class AddSomeCodeWebPart extends BaseClientSideWebPart<IAddSomeCo
       pages: [
         {
           header: {
-            description: strings.PropertyPaneDescription
+            description: strings.PropertyPaneFirstPageHeader
           },
           groups: [
             {
               groupName: strings.BasicGroupName,
               groupFields: [
-                PropertyPaneTextField('description', {
-                  label: strings.DescriptionFieldLabel
+                PropertyPaneTextField('code', {
+                  label: strings.CodeFieldLabel,
+                  multiline: true,
+                  resizable: true,
+                  placeholder: 'add some code...'
                 })
               ]
             }

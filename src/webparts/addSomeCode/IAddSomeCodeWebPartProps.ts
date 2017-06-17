@@ -1,3 +1,3 @@
 export interface IAddSomeCodeWebPartProps {
-  description: string;
+  code: string;
 }

@@ -1,7 +1,7 @@
 declare interface IAddSomeCodeStrings {
-  PropertyPaneDescription: string;
+  PropertyPaneFirstPageHeader: string;
   BasicGroupName: string;
-  DescriptionFieldLabel: string;
+  CodeFieldLabel: string;
 }
 
 declare module 'addSomeCodeStrings' {
