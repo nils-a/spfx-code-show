@@ -1,10 +1,12 @@
 /// <reference path="../../../node_modules/@types/highlight.js/index.d.ts" />
 
-import { Version } from '@microsoft/sp-core-library';
+import {
+  Version,
+  DisplayMode
+} from '@microsoft/sp-core-library';
 import {
   BaseClientSideWebPart,
   IPropertyPaneConfiguration,
-  PropertyPaneTextField,
   PropertyPaneDropdown,
   IPropertyPaneDropdownOption
 } from '@microsoft/sp-webpart-base';
@@ -16,10 +18,14 @@ import { IAddSomeCodeWebPartProps } from './IAddSomeCodeWebPartProps';
 import * as hljs from 'highlight.js';
 
 export default class AddSomeCodeWebPart extends BaseClientSideWebPart<IAddSomeCodeWebPartProps> {
+
+  private readContainer: HTMLElement;
+  private editContainer: HTMLTextAreaElement;
+
   private getPossibleLanguages(): IPropertyPaneDropdownOption[] {
-    var options:IPropertyPaneDropdownOption[] = [];
+    var options: IPropertyPaneDropdownOption[] = [];
     options.push({
-      key:'',
+      key: '',
       text: 'Auto',
       index: 0
     });
@@ -32,16 +38,47 @@ export default class AddSomeCodeWebPart extends BaseClientSideWebPart<IAddSomeCo
     return options;
   };
 
-  public container:HTMLElement;
+  private renderRead(): void {
+    if(!!this.editContainer) {
+      this.domElement.removeChild(this.editContainer);
+      this.editContainer = null;
+    }
+
+    if (!this.readContainer) {
+      this.readContainer = document.createElement("div");
+      this.readContainer.classList.add(styles.container);
+      this.domElement.appendChild(this.readContainer);
+    }
+    this.readContainer.innerHTML = `<pre class="${styles.formatted} ${this.properties.language}"><code>${escape(this.properties.code)}</code></pre>`;
+    hljs.highlightBlock(this.readContainer.firstChild);
+  }
+
+  private renderEdit(): void {
+    if(!!this.readContainer) {
+      this.domElement.removeChild(this.readContainer);
+      this.readContainer = null;
+    }
+
+    if (!this.editContainer) {
+      this.editContainer = document.createElement("textarea");
+      this.editContainer.style.width = "100%";
+      var lines = (this.properties.code || "").split("\n").length;
+      if (lines < 5) { lines = 5; }
+      this.editContainer.style.height = (2 * lines) + "em";
+      this.editContainer.value = this.properties.code || "";
+      this.editContainer.addEventListener("input", () => {
+        this.properties.code = this.editContainer.value;
+      });
+      this.domElement.appendChild(this.editContainer);
+    }
+  }
 
   public render(): void {
-    if(!this.container) {
-      this.container = document.createElement("div");
-      this.container.classList.add(styles.container);
-      this.domElement.appendChild(this.container);
+    if (this.displayMode == DisplayMode.Read) {
+      this.renderRead();
+    } else {
+      this.renderEdit();
     }
-    this.container.innerHTML = `<pre class="${styles.formatted} ${this.properties.language}"><code>${escape(this.properties.code)}</code></pre>`;
-    hljs.highlightBlock(this.container.firstChild);
   }
 
   protected get dataVersion(): Version {
@@ -59,12 +96,6 @@ export default class AddSomeCodeWebPart extends BaseClientSideWebPart<IAddSomeCo
             {
               groupName: strings.BasicGroupName,
               groupFields: [
-                PropertyPaneTextField('code', {
-                  label: strings.CodeFieldLabel,
-                  multiline: true,
-                  resizable: true,
-                  placeholder: 'add some code...'
-                }),
                 PropertyPaneDropdown('language', {
                   label: strings.LanguageFieldLabel,
                   selectedKey: 'Auto',
