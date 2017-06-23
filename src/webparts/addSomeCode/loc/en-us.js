@@ -2,6 +2,7 @@ define([], function() {
   return {
     "PropertyPaneFirstPageHeader": "Basic Settings",
     "BasicGroupName": "Common",
-    "CodeFieldLabel": "Code"
+    "CodeFieldLabel": "Code",
+    "LanguageFieldLabel": "Language"
   }
 });

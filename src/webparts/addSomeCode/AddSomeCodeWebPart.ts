@@ -4,7 +4,9 @@ import { Version } from '@microsoft/sp-core-library';
 import {
   BaseClientSideWebPart,
   IPropertyPaneConfiguration,
-  PropertyPaneTextField
+  PropertyPaneTextField,
+  PropertyPaneDropdown,
+  IPropertyPaneDropdownOption
 } from '@microsoft/sp-webpart-base';
 import { escape } from '@microsoft/sp-lodash-subset';
 
@@ -14,6 +16,21 @@ import { IAddSomeCodeWebPartProps } from './IAddSomeCodeWebPartProps';
 import * as hljs from 'highlight.js';
 
 export default class AddSomeCodeWebPart extends BaseClientSideWebPart<IAddSomeCodeWebPartProps> {
+  private getPossibleLanguages(): IPropertyPaneDropdownOption[] {
+    var options:IPropertyPaneDropdownOption[] = [];
+    options.push({
+      key:'',
+      text: 'Auto',
+      index: 0
+    });
+    hljs.listLanguages().map(l => {
+      options.push({
+        key: l,
+        text: l
+      });
+    });
+    return options;
+  };
 
   public container:HTMLElement;
 
@@ -23,7 +40,7 @@ export default class AddSomeCodeWebPart extends BaseClientSideWebPart<IAddSomeCo
       this.container.classList.add(styles.container);
       this.domElement.appendChild(this.container);
     }
-    this.container.innerHTML = `<pre class="${styles.formatted}"><code>${escape(this.properties.code)}</code></pre>`;
+    this.container.innerHTML = `<pre class="${styles.formatted} ${this.properties.language}"><code>${escape(this.properties.code)}</code></pre>`;
     hljs.highlightBlock(this.container.firstChild);
   }
 
@@ -47,6 +64,11 @@ export default class AddSomeCodeWebPart extends BaseClientSideWebPart<IAddSomeCo
                   multiline: true,
                   resizable: true,
                   placeholder: 'add some code...'
+                }),
+                PropertyPaneDropdown('language', {
+                  label: strings.LanguageFieldLabel,
+                  selectedKey: 'Auto',
+                  options: this.getPossibleLanguages()
                 })
               ]
             }
