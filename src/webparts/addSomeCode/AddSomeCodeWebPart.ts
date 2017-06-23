@@ -1,3 +1,5 @@
+/// <reference path="../../../node_modules/@types/highlight.js/index.d.ts" />
+
 import { Version } from '@microsoft/sp-core-library';
 import {
   BaseClientSideWebPart,
@@ -9,14 +11,20 @@ import { escape } from '@microsoft/sp-lodash-subset';
 import styles from './AddSomeCode.module.scss';
 import * as strings from 'addSomeCodeStrings';
 import { IAddSomeCodeWebPartProps } from './IAddSomeCodeWebPartProps';
+import * as hljs from 'highlight.js';
 
 export default class AddSomeCodeWebPart extends BaseClientSideWebPart<IAddSomeCodeWebPartProps> {
 
+  public container:HTMLElement;
+
   public render(): void {
-    this.domElement.innerHTML = `
-    <div class="${styles.container}">
-      <pre class="${styles.formatted}">${escape(this.properties.code)}</pre>
-    </div>`;
+    if(!this.container) {
+      this.container = document.createElement("div");
+      this.container.classList.add(styles.container);
+      this.domElement.appendChild(this.container);
+    }
+    this.container.innerHTML = `<pre class="${styles.formatted}"><code>${escape(this.properties.code)}</code></pre>`;
+    hljs.highlightBlock(this.container.firstChild);
   }
 
   protected get dataVersion(): Version {
